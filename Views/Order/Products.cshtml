@@ -1,0 +1,33 @@
+﻿@model Hometech.Models.OrderViewModels.ProductsViewModel
+@{
+    ViewData["Title"] = "Ваш заказ";
+}
+
+<h2>@ViewData["Title"]</h2>
+<div class="row">
+    <div class="col-md-6">
+        <form method="post">
+            <table class="table">
+            @for (var index=0;index<Model.Prods.Count;index++)
+            {
+                var p = Model.Prods[index];
+                <tr><td>@p.category @p.manufacturer @p.vendor_code</td><td>@p.price</td>
+                    @if (p.amount > 0)
+                    {
+                        <td>В наличии</td>
+                    }
+                    else
+                    {
+                        <td>Товар закончился</td>
+                    }
+                    <td><input asp-for="Prods[index].number"></td>
+                    <span asp-validation-for="Prods[index].number" class="text-danger"></span>
+                </tr>
+                <input type="hidden" asp-for="Prods[index].vendor_code">
+                <input type="hidden" asp-for="Prods[index].amount">
+            }
+            </table>
+        <button type="submit" class="btn btn-primary">Подтвердить</button>
+        </form>
+    </div>
+</div>

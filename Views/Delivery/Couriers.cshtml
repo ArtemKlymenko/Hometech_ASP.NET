@@ -1,0 +1,26 @@
+﻿@model Hometech.Models.DeliveryViewModels.CourierViewModel
+@{
+    ViewData["Title"] = "Курьеры";
+}
+
+<h2>@ViewData["Title"]</h2>
+<table class="table">
+<tr><th>Идентификатор курьера</th><th>Имя</th><th>Фамилия</th><th>Назначить</th></tr>
+@for (var index=0;index<Model.Couriers.Count;index++)
+{
+    var p = Model.Couriers[index];
+    <tr>
+        <td>@p.id_courier</td>
+        <td>@p.name</td>
+        <td>@p.surname</td>
+        @if (p.status == Status.Available)
+        {
+            <td><a asp-action="Assign" asp-controller="Delivery" asp-route-idOrder=@ViewBag.IdOrder asp-route-idCourier=@p.id_courier>Назначить</a></td>
+        }
+        else
+        {
+            <td>Курьер недоступен</td>
+        }
+    </tr>
+}
+</table>

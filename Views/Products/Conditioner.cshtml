@@ -1,0 +1,37 @@
+﻿@using Hometech.Controllers
+@{
+    ViewData["Title"] = "Кондиционеры";
+}
+
+<h2>@ViewData["Title"]</h2>
+<div class = "container-fluid">
+    <div class = "row">
+        @foreach (ProductInfo p in Model)
+        {
+            <div class="col-3 border pb-3 pt-3">
+                <img src="img/@p.img" alt="@p.img" class="justify-content-center pb-3">
+                <p class="text-start w-75" style="height:3em">@p.category @p.manufacturer @p.vendor_code</p>
+                <div class="row">
+                    <div class="col-6 fs-5 fw-bold">@p.price ₴</div>
+                    <div class="col-6">
+                        @if (!p.is_available)
+                        {
+                        <p>Товар закончился</p>}
+                        else if (User.IsInRole("Клиент"))
+                        {
+                            @if (!p.in_cart)
+                            {
+                                <a type="button" class="btn btn-primary" asp-controller="Home" asp-action="AddItem" asp-route-vendorCode=@p.vendor_code asp-route-a="Conditioner" asp-route-c="Products">Добавить</a>
+                            }
+                            else
+                            {<p>В корзине</p>}
+                        }
+                        else
+                        {
+                             <p>В наличии</p>}
+                    </div>
+                </div>
+            </div>
+        }
+    </div>        
+</div>

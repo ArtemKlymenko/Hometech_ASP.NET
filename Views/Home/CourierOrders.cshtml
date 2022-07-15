@@ -1,0 +1,28 @@
+﻿@model Hometech.Models.DeliveryViewModels.CourierOrders
+@{
+    ViewData["Title"] = "Информация о заказе";
+}
+@if (!ViewBag.isInDelivery)
+{
+    <h2>У вас нет текущих заказов.</h2>
+    <a asp-area="" asp-controller="Home" asp-action="CourierOrders">Проверить наличие заказов</a>
+}
+else
+{
+    <h3>Информация о клиенте:</h3>
+    <table class="table">
+        <tr><th>Имя</th><td>@Model.Name</td></tr>
+        <tr><th>Фамилия</th><td>@Model.Surname</td></tr>
+        <tr><th>Адрес</th><td>г. @Model.ClientInfo.city, @Model.ClientInfo.street, @Model.ClientInfo.home_number</td></tr>
+    </table>
+    <h3>Информация о заказе:</h3>
+    <table class="table">
+        <tr><th>Товар</th><th>Количество</th></tr>
+        @foreach (var p in Model.Prods)
+        {
+            <tr><td>@p.category @p.manufacturer @p.vendor_code</td><td>@p.number</td></tr>
+        }
+    </table>
+    <p font-size="20px">Нажмите на эту кнопку, чтобы подтвердить окончание доставки заказа.</p>
+    <input type="button" class="btn btn-primary" value="Подтвердить" onclick="location.href='@Url.Action("ConfirmDelivery", "Delivery", new { idOrder = Model.IdOrder })'"/>
+}

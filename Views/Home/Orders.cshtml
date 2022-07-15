@@ -1,0 +1,65 @@
+﻿@{
+    ViewData["Title"] = "Все заказы";
+}
+
+@if(ViewBag.NoOrders){
+    <h2>Заказов пока нет. Ожидайте!</h2>
+    <a asp-controller="Home" asp-action="Orders" >Проверить наличие заказов</a>
+}
+else
+{
+    <h2>@ViewData["Title"]</h2>
+    <table class="table">
+        <tr><th>Клиент</th><th>Номер заказа</th><th>Статус</th><th>Общая цена</th><th>Дата заказа</th><th>Время заказа</th><th></th>
+        </tr>
+        @foreach (Order p in Model)
+        {
+            <tr><td>@p.id_client</td>
+                <td>@p.id_order</td>
+                <td>@p.status</td>
+                <td>@p.total_price</td>
+                @if (p.order_datetime == null)
+                {
+                    <td></td>
+                    <td></td>
+                }
+                else
+                {
+                    var dateTime = Convert.ToDateTime(p.order_datetime);
+                    <td>@dateTime.ToString("dd/MM/yyyy")</td>
+                    <td>@dateTime.ToString("HH:mm:ss")</td>
+                }
+                @switch (p.status)
+                {
+                    case "Принят":
+                    {
+                        <td><a asp-controller="Delivery" asp-action="Couriers" asp-route-idOrder="@p.id_order">Выбрать курьера</a></td>
+                        break;
+                    }
+                    case "Доставлен":
+                    {
+                        <td>Заказ доставлен</td>
+                        break;
+                    }
+                    case "В пути":
+                    {
+                        <td>Заказ в пути</td>
+                        break;
+                    }
+                    case "Оформлен":
+                    {
+                        <td><a asp-controller="Home" asp-action="AcceptOrder" asp-route-idOrder="@p.id_order">Принять</a>/
+                            <a asp-controller="Home" asp-action="CancelOrder" asp-route-idOrder="@p.id_order">Отклонить</a>
+                            </td>
+                        break;
+                    }
+                    case "Отклонён":
+                    {
+                        <td>Заказ отклонён</td>
+                        break;
+                    }   
+                }
+            </tr>
+        }
+    </table>
+}
